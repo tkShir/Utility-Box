@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 import './box.dart';
 import './box_info.dart';
@@ -7,55 +6,70 @@ import './box_info.dart';
 class BoxLayout extends StatelessWidget {
   final List<BoxInfo> displayBoxInfos;
   List<UtilBox> displayBoxes;
-  int gridAmount;
-  int gridDim;
+  final List<Color> boxColorPalette = [
+    Color.fromRGBO(225, 188, 41, 0.8),
+    Colors.green,
+    Colors.blue,
+    Colors.pink
+  ];
 
-  BoxLayout(this.displayBoxInfos) {
-    int boxAmount = displayBoxInfos.length;
-    gridAmount = _ceilToNearestSquare(boxAmount);
-    gridDim = sqrt(gridAmount).toInt();
-  }
-
-  List<UtilBox> createDisplayBoxes(List<BoxInfo> displayBoxInfo) {
-    for (int i = 0; i >= displayBoxInfo.length; i++) {
-      BoxInfo targetBoxInfo = displayBoxInfo[i];
-      if (targetBoxInfo.boxType == BoxType.UtilBox) {
-        UtilBox box = UtilBox();
-      } else if (targetBoxInfo.boxType == BoxType.URLBox) {
-        URLBox box = URLBox();
-      } else if (targetBoxInfo.boxType == BoxType.AppBox) {
-        AppBox box = AppBox();
-      }
+  BoxLayout(this.displayBoxInfos);
+  UtilBox createDisplayBox(int index, double boxWidth, double boxHeight) {
+    UtilBox box;
+    BoxInfo targetBoxInfo = displayBoxInfos[index];
+    Color _boxColor, _textColor;
+    if (targetBoxInfo.boxColor == null) {
+      _boxColor = boxColorPalette[index % boxColorPalette.length];
+      _textColor = Colors.white;
+    } else {
+      _boxColor = targetBoxInfo.boxColor;
+      _textColor = targetBoxInfo.textColor;
     }
-
-    return [];
-  }
-
-  int _ceilToNearestSquare(int i) {
-    int count = 1;
-    int countSquared = 1;
-    while (i > countSquared) {
-      count++;
-      countSquared = pow(count, 2).toInt();
-    }
-    return countSquared;
+    if (targetBoxInfo.boxType == BoxType.UtilBox) {
+      box = UtilBox(
+        boxColor: _boxColor,
+        textColor: _textColor,
+        boxWidth: boxWidth,
+        boxHeight: boxHeight,
+        title: targetBoxInfo.boxTitle,
+        iconData: targetBoxInfo.iconData,
+      );
+    } else if (targetBoxInfo.boxType == BoxType.URLBox) {
+      box = URLBox(
+          boxColor: _boxColor,
+          textColor: _textColor,
+          boxWidth: boxWidth,
+          boxHeight: boxHeight,
+          title: targetBoxInfo.boxTitle,
+          iconData: targetBoxInfo.iconData,
+          boxUrl: targetBoxInfo.boxURL);
+    } 
+    return box;
   }
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double marginSize = 10.0;
+    double boxAspectRatio = 0.85;
+    double padding = 10.0;
+    double boxWidth = (screenWidth - (padding * 2) - marginSize) / 2;
+    double boxHeight = boxWidth / boxAspectRatio;
     return GridView.count(
       // Create a grid with 2 columns. If you change the scrollDirection to
       // horizontal, this produces 2 rows.
+      padding: EdgeInsets.all(padding),
       crossAxisCount: 2,
+      crossAxisSpacing: marginSize,
+      mainAxisSpacing: marginSize,
+      childAspectRatio: boxAspectRatio,
       // Generate 100 widgets that display their index in the List.
       children: List.generate(
-        100,
+        displayBoxInfos.length,
         (index) {
-          return Center(
-            child: Text(
-              'Item $index',
-              style: Theme.of(context).textTheme.headline,
-            ),
+          return GestureDetector(
+            onTap: () {},
+            child: createDisplayBox(index, boxWidth, boxHeight),
           );
         },
       ),
