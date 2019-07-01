@@ -2,10 +2,35 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import './box.dart';
+import './box_info.dart';
+import './box_layout.dart';
 
 class Home extends StatelessWidget {
+  List<BoxInfo> _exampleBoxInfos = [
+    BoxInfo(
+      boxTitle: "Student Link",
+      boxType: BoxType.URLBox,
+      iconData: Icons.school,
+      boxURL: 'http://www.bu.edu/studentlink',
+      boxColor: Color.fromRGBO(225, 188, 41, 0.8),
+      textColor: Colors.white,
+    ),
+    BoxInfo(
+        boxTitle: "Testing 2",
+        boxType: BoxType.URLBox,
+        iconData: Icons.all_inclusive),
+    BoxInfo(
+      boxTitle: "Line",
+      boxType: BoxType.URLBox,
+      boxURL: 'https://line.me/R/nv/chat',
+      iconData: Icons.message,
+    ),
+    BoxInfo(boxTitle: "Testing 4", boxType: BoxType.UtilBox),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -14,48 +39,16 @@ class Home extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: Center(
-        child: Text("Hello, This is  a Placeholder"),
-      ),
-    );
-  }
-
-  Widget _buildBox(String title, double availWidth, double availHeight,
-      double screenRatioHeight,
-      {Color color, String link, IconData iconData}) {
-    if (iconData == null) {
-      iconData = Icons.ac_unit;
-    }
-    double boxWidth = (availWidth * 0.95) / 2;
-    double boxHeight = (availHeight * 0.95) / 2;
-    print(boxHeight);
-    return Container(
-      width: boxWidth,
-      height: boxHeight,
-      child: Column(
-        children: <Widget>[
+      body: Column(
+        children: [
           Container(
-            margin:
-                EdgeInsets.only(top: boxHeight * 0.3, bottom: boxHeight * 0.15),
-            child: Icon(
-              iconData,
-              size: boxHeight * 0.3,
-            ),
+            height: deviceHeight * 0.2,
+            child: Text("Hello, This is  a Placeholder"),
           ),
-          Text(
-            title,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 20 * boxHeight / 231.42,
-            ),
+          Expanded(
+            child: BoxLayout(_exampleBoxInfos),
           ),
         ],
-      ),
-      alignment: Alignment.bottomCenter,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        color: color,
       ),
     );
   }
