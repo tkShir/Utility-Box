@@ -1,15 +1,24 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:async';
 
 class UtilBox extends StatelessWidget {
+  final Color boxColor;
+  final Color textColor;
   final double sampleBoxHeight = 231.42;
-
-  final double boxHeight;
   final double boxWidth;
+  final double boxHeight;
   final String title;
   final IconData iconData;
   final IconData _defaultIcon = Icons.laptop_windows;
-  UtilBox({this.boxWidth, this.boxHeight, this.title, this.iconData});
+  UtilBox({
+    @required this.boxWidth,
+    @required this.boxHeight,
+    @required this.title,
+    this.iconData,
+    @required this.boxColor,
+    @required this.textColor,
+  });
 
   // double boxWidth = (availWidth * 0.95) / 2;
   // double boxHeight = (availHeight * 0.95) / 2;
@@ -22,13 +31,11 @@ class UtilBox extends StatelessWidget {
       iconDataBuild = _defaultIcon;
     }
     return Container(
-      width: boxWidth,
-      height: boxHeight,
       child: Column(
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(
-                top: boxHeight * 0.35, bottom: boxHeight * 0.15),
+                top: boxHeight * 0.25, bottom: boxHeight * 0.15),
             child: Icon(
               iconDataBuild,
               size: boxHeight * 0.3,
@@ -37,7 +44,7 @@ class UtilBox extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              color: Colors.white,
+              color: textColor,
               fontWeight: FontWeight.bold,
               fontSize: 22 * boxHeight / sampleBoxHeight,
             ),
@@ -47,7 +54,7 @@ class UtilBox extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
-        color: Colors.white,
+        color: boxColor,
       ),
     );
   }
@@ -59,36 +66,35 @@ class URLBox extends UtilBox {
   URLBox(
       {double boxHeight,
       double boxWidth,
-      String title,
-      String url,
+      Color boxColor,
+      Color textColor,
+      @required String title,
       IconData iconData,
-      this.boxUrl})
+      @required this.boxUrl})
       : super(
+          boxColor: boxColor,
           boxWidth: boxWidth,
           boxHeight: boxHeight,
           title: title,
           iconData: iconData,
+          textColor: textColor,
         );
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(onTap: () {}, child: super.build(context));
+    return GestureDetector(
+      onTap: _launchURL,
+      child: super.build(context),
+    );
+  }
+
+  _launchURL() async {
+    if (await canLaunch(boxUrl)) {
+      await launch(boxUrl);
+    } else {
+      throw 'Could not launch $boxUrl';
+    }
   }
 }
 
-class AppBox extends UtilBox {
-  final String appName;
-  AppBox(
-      {double boxHeight,
-      double boxWidth,
-      String title,
-      String url,
-      IconData iconData,
-      this.appName})
-      : super(
-          boxWidth: boxWidth,
-          boxHeight: boxHeight,
-          title: title,
-          iconData: iconData,
-        );
-}
+
