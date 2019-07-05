@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 enum BoxType {
-  UtilBox,
+  AppBox,
   URLBox,
+  PreMadeBox,
 }
 
 class BoxInfo extends Object {
@@ -11,7 +12,7 @@ class BoxInfo extends Object {
   final Color textColor;
   final IconData iconData;
   final BoxType boxType;
-  final String boxURL;
+  final String boxUrl;
   final String appName;
 
   BoxInfo({
@@ -20,7 +21,7 @@ class BoxInfo extends Object {
     this.textColor,
     this.iconData,
     @required this.boxType,
-    this.boxURL,
+    this.boxUrl,
     this.appName,
   });
 }
