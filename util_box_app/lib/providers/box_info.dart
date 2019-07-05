@@ -5,8 +5,8 @@ import '../util/t_c_logo_icons.dart';
 
 class BoxInfoProvider with ChangeNotifier {
   List<String> hello = [''];
-  List<BoxInfo> _boxInfos = [];
-  List<BoxInfo> _exBoxInfo = [
+  List<BoxInfo> _exBoxInfos = [];
+  List<BoxInfo> _boxInfos = [
     BoxInfo(
       boxTitle: "Student Link",
       boxType: BoxType.URLBox,
@@ -35,10 +35,18 @@ class BoxInfoProvider with ChangeNotifier {
     ),
   ];
   List<BoxInfo> get exampleInfo {
-    return [..._exBoxInfo];
+    return [..._exBoxInfos];
   }
 
   List<BoxInfo> get boxInfos {
     return [..._boxInfos];
+  }
+
+  void addBox(BoxInfo boxInfo) {
+    _boxInfos.add(boxInfo);
+  }
+
+  void deleteBox(int index) {
+    _boxInfos.removeAt(index);
   }
 }
