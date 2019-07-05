@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
+import 'package:provider/provider.dart';
 
 import '../providers/box_info.dart';
 import '../models/box_info.dart';
@@ -189,12 +190,12 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
     );
   }
 
-  Widget _buildSubmitButton() {
+  Widget _buildSubmitButton(BoxInfoProvider boxData) {
     return RaisedButton(
       child: Text('Save'),
       textColor: Colors.white,
       onPressed: () {
-        _submitForm();
+        _submitForm(boxData);
       },
     );
   }
@@ -207,7 +208,7 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
   //   'boxUrl': null,
   // };
 
-  void _submitForm() {
+  void _submitForm(BoxInfoProvider boxData) {
     if (!_formKey.currentState.validate()) {
       return;
     }
@@ -220,30 +221,8 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
       boxType: _createBoxType,
       boxUrl: _formData['boxUrl'],
     );
+    boxData.addBox(createdBoxInfo);
     // TODO: Create Add Box function in the providers and implement here
-  }
-
-  Widget _buildPageContent(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(10.0),
-      child: Form(
-        key: _formKey,
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          children: <Widget>[
-            _buildTitleTextField(),
-            SizedBox(
-              height: 10.0,
-            ),
-            _buildBoxColorPicker(context),
-            _buildTextColorPicker(context),
-            _buildIconField(),
-            _buildURLTextField(),
-            _buildSubmitButton(),
-          ],
-        ),
-      ),
-    );
   }
 
   @override
@@ -254,7 +233,7 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
     super.initState();
   }
 
-  Widget _createUtilBoxContent(context) {
+  Widget _createUtilBoxContent(context, BoxInfoProvider boxData) {
     return Container(
       margin: EdgeInsets.all(10.0),
       child: Form(
@@ -270,7 +249,7 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
             _buildIconField(),
             _buildURLTextField(),
             SizedBox(height: 10.0),
-            _buildSubmitButton(),
+            _buildSubmitButton(boxData),
           ],
         ),
       ),
@@ -293,13 +272,15 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
 
   @override
   Widget build(BuildContext context) {
+    final BoxInfoProvider boxData = Provider.of<BoxInfoProvider>(context);
+
     Widget _pageContent;
     if (_createBoxType == BoxType.PreMadeBox) {
       _pageContent = Text("Not Ready Yet! Please Come Back Later :)");
     } else if (_createBoxType == BoxType.AppBox) {
       _pageContent = Text("AppBox");
     } else {
-      _pageContent = _createUtilBoxContent(context);
+      _pageContent = _createUtilBoxContent(context, boxData);
     }
     return Scaffold(
       appBar: AppBar(
