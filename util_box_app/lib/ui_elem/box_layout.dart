@@ -14,6 +14,7 @@ class BoxLayout extends StatelessWidget {
   ];
 
   BoxLayout(this.displayBoxInfos);
+  
   UtilBox createDisplayBox(int index, double boxWidth, double boxHeight) {
     UtilBox box;
     BoxInfo targetBoxInfo = displayBoxInfos[index];
