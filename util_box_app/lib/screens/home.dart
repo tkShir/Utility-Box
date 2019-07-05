@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final boxData = Provider.of<BoxInfoProvider>(context);
-    final List<BoxInfo> _exampleBoxInfo = boxData.exampleInfo;
+    final List<BoxInfo> _exampleBoxInfo = boxData.boxInfos;
 
     double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
