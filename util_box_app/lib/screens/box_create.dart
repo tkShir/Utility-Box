@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
-import '../providers/util_boxes.dart';
+import '../providers/box_info.dart';
 import '../models/box_info.dart';
 
 class BoxCreatePage extends StatefulWidget {

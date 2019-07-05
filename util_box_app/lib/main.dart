@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import './screens/home.dart';
 import './screens/box_admin.dart';
 import './screens/box_create.dart';
-import './providers/util_boxes.dart';
+import './providers/box_info.dart';
 
 void main() {
   //debugPaintSizeEnabled = true;
@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (ctx) => UtilBoxes(),
+      builder: (ctx) => BoxInfoProvider(),
       child: MaterialApp(
         theme: ThemeData(
           brightness: Brightness.light,

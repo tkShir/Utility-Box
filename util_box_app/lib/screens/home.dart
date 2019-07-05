@@ -7,7 +7,7 @@ import '../models/box_info.dart';
 import '../screens/box_admin.dart';
 import '../ui_elem/box_layout.dart';
 import '../Util/t_c_logo_icons.dart';
-import '../providers/util_boxes.dart';
+import '../providers/box_info.dart';
 
 class HomePage extends StatefulWidget {
   static const String pageRoute = '/';
@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final boxData = Provider.of<UtilBoxes>(context);
+    final boxData = Provider.of<BoxInfoProvider>(context);
     final List<BoxInfo> _exampleBoxInfo = boxData.exampleInfo;
 
     double deviceHeight = MediaQuery.of(context).size.height;

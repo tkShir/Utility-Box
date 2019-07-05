@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:util_box_app/models/box_info.dart';
 
-import '../models/util_box.dart';
+import '../models/box_info.dart';
 import '../util/t_c_logo_icons.dart';
 
-class UtilBoxes with ChangeNotifier {
-  List<UtilBox> _boxes = [];
-  List<BoxInfo> _boxInfo = [
+class BoxInfoProvider with ChangeNotifier {
+  List<String> hello = [''];
+  List<BoxInfo> _boxInfos = [];
+  List<BoxInfo> _exBoxInfo = [
     BoxInfo(
       boxTitle: "Student Link",
       boxType: BoxType.URLBox,
@@ -34,8 +34,11 @@ class UtilBoxes with ChangeNotifier {
       iconData: TCLogo.tc_logo,
     ),
   ];
-
   List<BoxInfo> get exampleInfo {
-    return [..._boxInfo];
+    return [..._exBoxInfo];
+  }
+
+  List<BoxInfo> get boxInfos {
+    return [..._boxInfos];
   }
 }
