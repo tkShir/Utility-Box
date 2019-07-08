@@ -39,6 +39,7 @@ class _MyAppState extends State<MyApp> {
         ),
         routes: {
           HomePage.pageRoute: (ctx) => HomePage(),
+          // TODO: Handle arguements passed in terms of box info
           BoxAdminPage.pageRoute: (ctx) => BoxAdminPage(),
           BoxCreatePage.pageRoute: (ctx) => BoxCreatePage(),
         },
