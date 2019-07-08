@@ -24,4 +24,8 @@ class BoxInfoProvider with ChangeNotifier {
   void deleteBox(int index) {
     _boxInfos.removeAt(index);
   }
+
+  void editBox(BoxInfo boxInfo, int index) {
+    _boxInfos[index] = boxInfo;
+  }
 }
