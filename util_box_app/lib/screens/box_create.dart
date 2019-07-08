@@ -17,21 +17,8 @@ class BoxCreatePage extends StatefulWidget {
 class _BoxCreatePageState extends State<BoxCreatePage> {
   BoxType _createBoxType;
   String _dropDownChoice = '';
-  final List<String> _defaultCategories = [
-    '',
-    'Utility',
-    'Educational',
-    'Informative',
-    'Random'
-  ];
-
-  final Map<String, IconData> _defaultIconChoice = {
-    '': Icons.check_box_outline_blank,
-    'Utility': Icons.build,
-    'Educational': Icons.edit,
-    'Informative': Icons.new_releases,
-    'Random': Icons.help
-  };
+  final List<String> _defaultCategories = defaultCategories;
+  final Map<String, IconData> _defaultIconChoice = defaultIconChoice;
 
   final Map<String, dynamic> _formData = {
     'boxTitle': null,
