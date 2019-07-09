@@ -33,7 +33,8 @@ class BoxAdminPage extends StatelessWidget {
             leading: Icon(boxInfos[index].iconData),
             trailing: Icon(Icons.edit),
             onTap: () {
-              Navigator.of(context).pushNamed(BoxCreatePage.pageRoute, arguments: boxInfos[index]);
+              Navigator.of(context).pushNamed(BoxCreatePage.pageRoute,
+                  arguments: {'boxInfo': boxInfos[index], 'index': index});
             },
           );
         },
