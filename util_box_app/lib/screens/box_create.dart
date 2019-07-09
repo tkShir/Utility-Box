@@ -9,9 +9,8 @@ import '../util/default_assets.dart';
 
 class BoxCreatePage extends StatefulWidget {
   static const String pageRoute = 'createBox';
-  final BoxInfo initialBoxInfo;
 
-  BoxCreatePage({this.initialBoxInfo});
+  BoxCreatePage();
 
   @override
   State<StatefulWidget> createState() {
@@ -37,7 +36,7 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
   Widget _buildTitleTextField() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Box Title'),
-      initialValue: null,
+      initialValue: _formData['boxTitle'],
       validator: (String value) {
         // if (value.trim().length <= 0) {
         if (value.isEmpty) {
@@ -76,6 +75,7 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
   }
 
   Widget _buildTextColorField(BuildContext context) {
+    print(_formData["textColor"]);
     return FormField(
       builder: (FormFieldState<Color> state) {
         return ListTile(
@@ -91,6 +91,7 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
               setState(() {
                 if (color != null) {
                   _formData["textColor"] = color;
+                  print(_formData["textColor"]);
                 }
               });
             });
@@ -226,14 +227,6 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
     );
   }
 
-  // final Map<String, dynamic> _formData = {
-  //   'boxTitle': null,
-  //   'textColor': null,
-  //   'boxColor': null,
-  //   'iconData': null,
-  //   'boxUrl': null,
-  // };
-
   void _submitForm(BoxInfoProvider boxData) {
     if (!_formKey.currentState.validate()) {
       return;
@@ -252,32 +245,45 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
     // TODO: Create Add Box function in the providers and implement here
   }
 
+  Widget _buildEditButton(boxData, int index) {
+    return RaisedButton(
+      child: Text('Save'),
+      textColor: Colors.white,
+      onPressed: () {
+        _editForm(boxData, index);
+      },
+    );
+  }
+
+  void _editForm(BoxInfoProvider boxData, int index) {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    _formKey.currentState.save();
+    BoxInfo createdBoxInfo = BoxInfo(
+      boxTitle: _formData['boxTitle'],
+      textColor: _formData['textColor'],
+      boxColor: _formData['boxColor'],
+      iconData: _formData['iconData'],
+      boxType: _createBoxType,
+      boxUrl: _formData['boxUrl'],
+    );
+    boxData.editBox(createdBoxInfo, index);
+    Navigator.of(context).pushReplacementNamed(HomePage.pageRoute);
+    // TODO: Create Add Box function in the providers and implement here
+  }
+
   @override
   void initState() {
-    final BoxInfo initialBox = widget.initialBoxInfo;
-
     if (_createBoxType == null) {
       _createBoxType = BoxType.URLBox;
-    }
-    if (initialBox != null) {
-      // final Map<String, dynamic> _formData = {
-      //   'boxTitle': null,
-      //   'textColor': null,
-      //   'boxColor': null,
-      //   'iconData': null,
-      //   'boxUrl': null,
-      // };
-      _formData['boxTitle'] = initialBox.boxTitle;
-      _formData['textColor'] = initialBox.textColor;
-      _formData['boxColor'] = initialBox.boxColor;
-      _formData['iconData'] = initialBox.iconData;
-      _formData['boxUrl'] = initialBox.boxUrl;
     }
 
     super.initState();
   }
 
-  Widget _createAppBoxContent(BuildContext context, BoxInfoProvider boxData) {
+  Widget _createAppBoxContent(BuildContext context, BoxInfoProvider boxData,
+      bool editingBox, int index) {
     return Expanded(
       child: Container(
         margin: EdgeInsets.all(10.0),
@@ -291,7 +297,9 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
               SizedBox(height: 10.0),
               _buildTextColorField(context),
               SizedBox(height: 10.0),
-              _buildSubmitButton(boxData),
+              editingBox
+                  ? _buildEditButton(boxData, index)
+                  : _buildSubmitButton(boxData),
             ],
           ),
         ),
@@ -299,7 +307,8 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
     );
   }
 
-  Widget _createUrlBoxContent(BuildContext context, BoxInfoProvider boxData) {
+  Widget _createUrlBoxContent(BuildContext context, BoxInfoProvider boxData,
+      bool editingBox, int index) {
     return Expanded(
       child: Container(
         margin: EdgeInsets.all(10.0),
@@ -316,7 +325,9 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
               _buildIconField(),
               _buildURLTextField(),
               SizedBox(height: 10.0),
-              _buildSubmitButton(boxData),
+              editingBox
+                  ? _buildEditButton(boxData, index)
+                  : _buildSubmitButton(boxData),
             ],
           ),
         ),
@@ -377,22 +388,42 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic> navArgs =
+        ModalRoute.of(context).settings.arguments;
+    BoxInfo initialBox = navArgs['boxInfo'];
+    final int initialBoxIndex = navArgs['index'];
+    final bool _editingBox = initialBox != null;
+    if (initialBox != null) {
+      // final Map<String, dynamic> _formData = {
+      //   'boxTitle': null,
+      //   'textColor': null,
+      //   'boxColor': null,
+      //   'iconData': null,
+      //   'boxUrl': null,
+      // };
+      _formData['boxTitle'] = initialBox.boxTitle;
+      _formData['textColor'] = initialBox.textColor;
+      _formData['boxColor'] = initialBox.boxColor;
+      _formData['iconData'] = initialBox.iconData;
+      _formData['boxUrl'] = initialBox.boxUrl;
+      initialBox == null;
+    }
     final BoxInfoProvider boxData = Provider.of<BoxInfoProvider>(context);
     Widget body;
     if (_createBoxType == BoxType.PreMadeBox) {
       body = Text("Not Ready Yet! Please Come Back Later :)");
     } else if (_createBoxType == BoxType.AppBox) {
-      body = _createAppBoxContent(context, boxData);
+      body =
+          _createAppBoxContent(context, boxData, _editingBox, initialBoxIndex);
     } else {
-      body = _createUrlBoxContent(context, boxData);
+      body =
+          _createUrlBoxContent(context, boxData, _editingBox, initialBoxIndex);
     }
-    return widget.initialBoxInfo == null
-        ? Scaffold(
-            appBar: AppBar(
-              title: Text("Testing - Create Page"),
-            ),
-            body: _buildPageContent(body),
-          )
-        : _buildPageContent(body);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Testing - Create Page"),
+      ),
+      body: _buildPageContent(body),
+    );
   }
 }
