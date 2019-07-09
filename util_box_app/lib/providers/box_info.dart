@@ -26,6 +26,12 @@ class BoxInfoProvider with ChangeNotifier {
   }
 
   void editBox(BoxInfo boxInfo, int index) {
-    _boxInfos[index] = boxInfo;
+    if (_displayDefaultBox) {
+      index > _defaultBoxInfos.length - 1
+          ? _boxInfos[index - _defaultBoxInfos.length] = boxInfo
+          : _defaultBoxInfos[index] = boxInfo;
+    } else {
+      _boxInfos[index] = boxInfo;
+    }
   }
 }
