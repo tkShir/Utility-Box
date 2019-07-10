@@ -12,34 +12,58 @@ import '../screens/box_create.dart';
 //   }
 // }
 
-class BoxAdminPage extends StatelessWidget {
+class BoxAdminPage extends StatefulWidget {
   static const String pageRoute = 'adminBox';
+  @override
+  State<StatefulWidget> createState() {
+    return _BoxAdminPageState();
+  }
+}
 
+class _BoxAdminPageState extends State<BoxAdminPage> {
   @override
   Widget build(BuildContext context) {
     final BoxInfoProvider boxData = Provider.of<BoxInfoProvider>(context);
     List<BoxInfo> boxInfos = boxData.boxInfos;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Testing - Admin Page"),
-      ),
-      body: ListView.separated(
-        padding: const EdgeInsets.all(8.0),
-        itemCount: boxInfos.length,
-        itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            title: Text(boxInfos[index].boxTitle),
-            leading: Icon(boxInfos[index].iconData),
-            trailing: Icon(Icons.edit),
-            onTap: () {
-              Navigator.of(context).pushNamed(BoxCreatePage.pageRoute,
-                  arguments: {'boxInfo': boxInfos[index], 'index': index});
-            },
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
-      ),
-    );
+        appBar: AppBar(
+          title: Text("Testing - Admin Page"),
+        ),
+        body: ReorderableListView(
+          children: _buildList(context, boxData, boxInfos),
+          onReorder: (int oldIndex, int newIndex) {
+            setState(() {
+              boxData.switchOrder(oldIndex, newIndex);
+            });
+          },
+        ));
   }
+}
+
+List<Widget> _buildList(
+    BuildContext context, BoxInfoProvider boxData, List<BoxInfo> boxInfos) {
+  List<Widget> listTiles = [];
+  for (int i = 0; i < boxInfos.length; i++) {
+    listTiles.add(Dismissible(
+      direction: DismissDirection.endToStart,
+      key: Key(boxInfos[i].boxTitle),
+      onDismissed: (DismissDirection direction) {
+        if (direction == DismissDirection.endToStart) {
+          boxData.deleteBox(i);
+        }
+      },
+      background: Container(color: Colors.red),
+      child: ListTile(
+        title: Text(boxInfos[i].boxTitle),
+        leading: Icon(boxInfos[i].iconData),
+        trailing: Icon(Icons.edit),
+        onTap: () {
+          Navigator.of(context).pushNamed(BoxCreatePage.pageRoute,
+              arguments: {'boxInfo': boxInfos[i], 'index': i});
+        },
+      ),
+    ));
+  }
+  return listTiles;
 }
