@@ -20,7 +20,8 @@ class BoxCreatePage extends StatefulWidget {
 
 class _BoxCreatePageState extends State<BoxCreatePage> {
   BoxType _createBoxType;
-  String _dropDownChoice = '';
+  String _categoryDropDownChoice = '';
+  String _appDropDownChoice = '';
   final List<String> _defaultCategories = defaultCategories;
   final Map<String, IconData> _defaultIconChoice = defaultIconChoice;
 
@@ -75,7 +76,6 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
   }
 
   Widget _buildTextColorField(BuildContext context) {
-    print(_formData["textColor"]);
     return FormField(
       builder: (FormFieldState<Color> state) {
         return ListTile(
@@ -91,7 +91,6 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
               setState(() {
                 if (color != null) {
                   _formData["textColor"] = color;
-                  print(_formData["textColor"]);
                 }
               });
             });
@@ -139,18 +138,19 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
       builder: (FormFieldState<String> state) {
         return InputDecorator(
           decoration: InputDecoration(
-            icon: Icon(_defaultIconChoice[_dropDownChoice]),
+            icon: Icon(_defaultIconChoice[_categoryDropDownChoice]),
             labelText: 'Categories',
           ),
-          isEmpty: _dropDownChoice == '',
+          isEmpty: _categoryDropDownChoice == '',
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
-              value: _dropDownChoice,
+              value: _categoryDropDownChoice,
               isDense: true,
               onChanged: (String newValue) {
                 setState(() {
-                  _dropDownChoice = newValue;
-                  _formData["iconData"] = _defaultIconChoice[_dropDownChoice];
+                  _categoryDropDownChoice = newValue;
+                  _formData["iconData"] =
+                      _defaultIconChoice[_categoryDropDownChoice];
                 });
               },
               items: _defaultCategories.map((String value) {
@@ -186,31 +186,60 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
   }
 
   Widget _buildAppSelectionField() {
+    bool _hasError = false;
+    String _errorMsg;
     return FormField<String>(
+      validator: (String value) {
+        if (_appDropDownChoice == '') {
+          _hasError = true;
+          _errorMsg = 'Please select an application';
+          return;
+        }
+        _hasError = false;
+        _errorMsg = '';
+      },
       builder: (FormFieldState<String> state) {
         return InputDecorator(
           decoration: InputDecoration(
-            icon: Icon(_defaultIconChoice[_dropDownChoice]),
+            icon: Icon(defaultAppsInfo[_appDropDownChoice].iconData),
             labelText: 'App',
           ),
-          isEmpty: _dropDownChoice == '',
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: _dropDownChoice,
-              isDense: true,
-              onChanged: (String newValue) {
-                setState(() {
-                  _dropDownChoice = newValue;
-                  _formData["iconData"] = _defaultIconChoice[_dropDownChoice];
-                });
-              },
-              items: _defaultCategories.map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
+          isEmpty: _appDropDownChoice == '',
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: _appDropDownChoice,
+                  isDense: true,
+                  onChanged: (String newValue) {
+                    setState(() {
+                      if (newValue != '') {
+                        _hasError = false;
+                      }
+                      _appDropDownChoice = newValue;
+                      _formData['boxTitle'] =
+                          defaultAppsInfo[_appDropDownChoice].boxTitle;
+                      _formData['boxUrl'] =
+                          defaultAppsInfo[_appDropDownChoice].boxUrl;
+                      _formData["iconData"] =
+                          defaultAppsInfo[_appDropDownChoice].iconData;
+                    });
+                  },
+                  items: defaultApps.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ),
+              Text(
+                _hasError ? _errorMsg : '',
+                style:
+                    TextStyle(color: Colors.redAccent.shade700, fontSize: 12.0),
+              )
+            ],
           ),
         );
       },
