@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool _isEmergency = false;
 
-  Widget buildSideDrawer(BuildContext context) {
+  Widget buildSideDrawer(BuildContext context, BoxInfoProvider boxData) {
     return Drawer(
       child: Column(
         children: <Widget>[
@@ -37,16 +37,17 @@ class _HomePageState extends State<HomePage> {
             },
           ),
           Divider(),
-          SwitchListTile(
-            title: Text("Emergency Mode"),
-            value: _isEmergency,
-            activeColor: Color(0xFFB00020),
-            onChanged: (bool value) {
-              setState(() {
-                _isEmergency = value;
-              });
-            },
-          ),
+          // SwitchListTile(
+          //   title: Text("Emergency Mode"),
+          //   value: _isEmergency,
+          //   activeColor: Color(0xFFB00020),
+          //   onChanged: (bool value) {
+          //     setState(() {
+          //       boxData.toggleDisplayDefaultBox();
+          //       //_isEmergency = value;
+          //     });
+          //   },
+          // ),
         ],
       ),
     );
