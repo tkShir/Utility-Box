@@ -417,25 +417,27 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
 
   @override
   Widget build(BuildContext context) {
+    BoxInfo initialBox;
+    int initialBoxIndex;
+    bool _editingBox = false;
+
     final Map<String, dynamic> navArgs =
         ModalRoute.of(context).settings.arguments;
-    BoxInfo initialBox = navArgs['boxInfo'];
-    final int initialBoxIndex = navArgs['index'];
-    final bool _editingBox = initialBox != null;
-    if (initialBox != null) {
-      // final Map<String, dynamic> _formData = {
-      //   'boxTitle': null,
-      //   'textColor': null,
-      //   'boxColor': null,
-      //   'iconData': null,
-      //   'boxUrl': null,
-      // };
+    if (navArgs != null) {
+      initialBox = navArgs['boxInfo'];
+      initialBoxIndex = navArgs['index'];
+      _editingBox = true;
+    }
+    if (initialBox != null && _formData['boxTitle'] == null) {
       _formData['boxTitle'] = initialBox.boxTitle;
       _formData['textColor'] = initialBox.textColor;
       _formData['boxColor'] = initialBox.boxColor;
       _formData['iconData'] = initialBox.iconData;
       _formData['boxUrl'] = initialBox.boxUrl;
-      initialBox == null;
+      _createBoxType = initialBox.boxType;
+      if (_createBoxType == BoxType.AppBox) {
+        _appDropDownChoice = _formData['boxTitle'];
+      }
     }
     final BoxInfoProvider boxData = Provider.of<BoxInfoProvider>(context);
     Widget body;
