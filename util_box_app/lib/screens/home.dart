@@ -55,12 +55,21 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final boxData = Provider.of<BoxInfoProvider>(context);
-    final List<BoxInfo> _exampleBoxInfo = boxData.boxInfos;
+    final BoxInfoProvider boxData = Provider.of<BoxInfoProvider>(context);
+    List<BoxInfo> _boxInfo = boxData.boxInfos;
+
+    if (!boxData.loadedBoxes) {
+      boxData.toggleLoadedBox();
+      boxData.loadAllBoxes().then((bool value) {
+        setState(() {
+          _boxInfo = boxData.boxInfos;
+        });
+      });
+    }
 
     double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      drawer: buildSideDrawer(context),
+      drawer: buildSideDrawer(context, boxData),
       appBar: AppBar(
         actions: <Widget>[
           IconButton(
@@ -72,22 +81,27 @@ class _HomePageState extends State<HomePage> {
         ],
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "Taka's Utility App",
+          "Utility Box App",
           style: TextStyle(color: Colors.white),
         ),
       ),
       body: Column(
         children: [
           Container(
-            height: deviceHeight * 0.2,
-            child: Text("Hello, This is  a Placeholder"),
+            height: deviceHeight * 0.1,
+            child: Center(
+              child: Text(
+                "Welcome to the box App\nAdd your own Box\nEdit your own box\nEnjoy!",
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
           Expanded(
             child: _isEmergency
                 ? Center(
                     child: Text("EMERGENCY MODE"),
                   )
-                : BoxLayout(_exampleBoxInfo),
+                : BoxLayout(_boxInfo),
           ),
         ],
       ),
