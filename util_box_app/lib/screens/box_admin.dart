@@ -30,14 +30,16 @@ class _BoxAdminPageState extends State<BoxAdminPage> {
         appBar: AppBar(
           title: Text("Testing - Admin Page"),
         ),
-        body: ReorderableListView(
-          children: _buildList(context, boxData, boxInfos),
-          onReorder: (int oldIndex, int newIndex) {
-            setState(() {
-              boxData.switchOrder(oldIndex, newIndex);
-            });
-          },
-        ));
+        body: boxInfos.length == 0
+            ? Center(child: Text("Please add a box first"))
+            : ReorderableListView(
+                children: _buildList(context, boxData, boxInfos),
+                onReorder: (int oldIndex, int newIndex) {
+                  setState(() {
+                    boxData.switchOrder(oldIndex, newIndex);
+                  });
+                },
+              ));
   }
 }
 
