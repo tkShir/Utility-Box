@@ -5,7 +5,7 @@ import '../models/box_info.dart';
 
 class BoxLayout extends StatelessWidget {
   final List<BoxInfo> displayBoxInfos;
-  List<UtilBox> displayBoxes;
+  
   final List<Color> boxColorPalette = [
     Color.fromRGBO(225, 188, 41, 0.8),
     Colors.green,

@@ -6,7 +6,6 @@ import '../screens/box_create.dart';
 import '../models/box_info.dart';
 import '../screens/box_admin.dart';
 import '../ui_elem/box_layout.dart';
-import '../Util/t_c_logo_icons.dart';
 import '../providers/box_info.dart';
 
 class HomePage extends StatefulWidget {

@@ -66,6 +66,7 @@ class BoxInfoProvider with ChangeNotifier {
     String encodedBoxInfojson = json.encode(convertedBoxInfos);
     prefs.setString('boxInfos', encodedBoxInfojson);
     notifyListeners();
+    return true;
   }
 
   Future<bool> loadAllBoxes() async {

@@ -271,7 +271,6 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
     );
     boxData.addBox(createdBoxInfo);
     Navigator.of(context).pushReplacementNamed(HomePage.pageRoute);
-    // TODO: Create Add Box function in the providers and implement here
   }
 
   Widget _buildEditButton(boxData, int index) {
@@ -299,7 +298,6 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
     );
     boxData.editBox(createdBoxInfo, index);
     Navigator.of(context).pushReplacementNamed(HomePage.pageRoute);
-    // TODO: Create Add Box function in the providers and implement here
   }
 
   @override
@@ -362,7 +360,6 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
         ),
       ),
     );
-    ;
   }
 
   Widget _createPreMadeBoxContent() {
@@ -442,7 +439,7 @@ class _BoxCreatePageState extends State<BoxCreatePage> {
     final BoxInfoProvider boxData = Provider.of<BoxInfoProvider>(context);
     Widget body;
     if (_createBoxType == BoxType.PreMadeBox) {
-      body = Text("Not Ready Yet! Please Come Back Later :)");
+      body = _createPreMadeBoxContent();
     } else if (_createBoxType == BoxType.AppBox) {
       body =
           _createAppBoxContent(context, boxData, _editingBox, initialBoxIndex);
