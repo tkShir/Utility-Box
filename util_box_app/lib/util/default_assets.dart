@@ -25,11 +25,9 @@ final List<BoxInfo> defaultBoxInfos = [
     boxType: BoxType.URLBox,
     iconData: Icons.school,
     boxUrl: 'http://www.bu.edu/studentlink',
-    boxColor: Color.fromRGBO(225, 188, 41, 0.8),
-    textColor: Colors.white,
   ),
-  defaultAppBox['LINE'],
-  defaultAppBox['GMail'],
+  defaultAppsInfo['LINE'],
+  defaultAppsInfo['Gmail'],
   BoxInfo(
     boxTitle: "TechCrunch",
     boxType: BoxType.URLBox,
@@ -38,17 +36,77 @@ final List<BoxInfo> defaultBoxInfos = [
   ),
 ];
 
-final Map<String, BoxInfo> defaultAppBox = {
+final List<String> defaultApps = [
+  '',
+  'LINE',
+  'Gmail',
+  'Google Maps',
+  'Facebook',
+  'YouTube',
+  'WhatsApp',
+  'Instagram',
+  'Twitter',
+  'Snapchat'
+];
+
+final Map<String, BoxInfo> defaultAppsInfo = {
+  '': BoxInfo(
+      boxTitle: '',
+      boxType: BoxType.AppBox,
+      iconData: Icons.check_box_outline_blank,
+      boxUrl: ''),
   'LINE': BoxInfo(
-    boxTitle: "Line",
-    boxType: BoxType.URLBox,
+    boxTitle: "LINE",
+    boxType: BoxType.AppBox,
     iconData: Icons.message,
     boxUrl: 'https://line.me/R/nv/chat',
   ),
-  'GMail': BoxInfo(
-    boxTitle: "GMail",
-    boxType: BoxType.URLBox,
+  'Gmail': BoxInfo(
+    boxTitle: "Gmail",
+    boxType: BoxType.AppBox,
     boxUrl: 'googlegmail://',
     iconData: Icons.mail,
+  ),
+  'Google Maps': BoxInfo(
+    boxTitle: 'Google Maps',
+    boxType: BoxType.AppBox,
+    boxUrl: 'googlemaps://',
+    iconData: Icons.map,
+  ),
+  'Facebook': BoxInfo(
+    boxTitle: 'Facebook',
+    boxType: BoxType.AppBox,
+    boxUrl: 'fb://',
+    iconData: Icons.face,
+  ),
+  'YouTube': BoxInfo(
+    boxTitle: 'YouTube',
+    boxType: BoxType.AppBox,
+    boxUrl: 'youtube://',
+    iconData: Icons.ondemand_video,
+  ),
+  'WhatsApp': BoxInfo(
+    boxTitle: 'WhatsApp',
+    boxType: BoxType.AppBox,
+    boxUrl: 'googlegmail://',
+    iconData: Icons.message,
+  ),
+  'Instagram': BoxInfo(
+    boxTitle: 'Instagram',
+    boxType: BoxType.AppBox,
+    boxUrl: 'instagram://',
+    iconData: Icons.camera,
+  ),
+  'Twitter': BoxInfo(
+    boxTitle: 'Twitter',
+    boxType: BoxType.AppBox,
+    boxUrl: 'twitter://',
+    iconData: Icons.message,
+  ),
+  'Snapchat': BoxInfo(
+    boxTitle: 'Snapchat',
+    boxType: BoxType.AppBox,
+    boxUrl: 'snapchat://',
+    iconData: Icons.camera_alt,
   ),
 };
