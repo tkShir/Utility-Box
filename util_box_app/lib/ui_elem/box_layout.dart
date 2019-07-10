@@ -14,7 +14,7 @@ class BoxLayout extends StatelessWidget {
   ];
 
   BoxLayout(this.displayBoxInfos);
-  
+
   UtilBox createDisplayBox(int index, double boxWidth, double boxHeight) {
     UtilBox box;
     BoxInfo targetBoxInfo = displayBoxInfos[index];
@@ -36,13 +36,14 @@ class BoxLayout extends StatelessWidget {
           iconData: targetBoxInfo.iconData,
           boxUrl: targetBoxInfo.boxUrl);
     } else if (targetBoxInfo.boxType == BoxType.AppBox) {
-      box = UtilBox(
+      box = URLBox(
         boxColor: _boxColor,
         textColor: _textColor,
         boxWidth: boxWidth,
         boxHeight: boxHeight,
         title: targetBoxInfo.boxTitle,
         iconData: targetBoxInfo.iconData,
+        boxUrl: targetBoxInfo.boxUrl,
       );
     } else if (targetBoxInfo.boxType == BoxType.PreMadeBox) {
       // TODO: Implement Premade box
@@ -59,24 +60,23 @@ class BoxLayout extends StatelessWidget {
     double padding = 10.0;
     double boxWidth = (screenWidth - (padding * 2) - marginSize) / 2;
     double boxHeight = boxWidth / boxAspectRatio;
-    return GridView.count(
-      // Create a grid with 2 columns. If you change the scrollDirection to
-      // horizontal, this produces 2 rows.
-      padding: EdgeInsets.all(padding),
-      crossAxisCount: 2,
-      crossAxisSpacing: marginSize,
-      mainAxisSpacing: marginSize,
-      childAspectRatio: boxAspectRatio,
-      // Generate 100 widgets that display their index in the List.
-      children: List.generate(
-        displayBoxInfos.length,
-        (index) {
-          return GestureDetector(
-            onTap: () {},
-            child: createDisplayBox(index, boxWidth, boxHeight),
+    return displayBoxInfos.length == 0
+        ? Center(child: Text('Please add a box!'))
+        : GridView.count(
+            padding: EdgeInsets.all(padding),
+            crossAxisCount: 2,
+            crossAxisSpacing: marginSize,
+            mainAxisSpacing: marginSize,
+            childAspectRatio: boxAspectRatio,
+            children: List.generate(
+              displayBoxInfos.length,
+              (index) {
+                return GestureDetector(
+                  onTap: () {},
+                  child: createDisplayBox(index, boxWidth, boxHeight),
+                );
+              },
+            ),
           );
-        },
-      ),
-    );
   }
 }
